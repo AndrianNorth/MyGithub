@@ -1,12 +1,15 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 
+import android.os.Bundle
 import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.Screen
 import moxy.MvpPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.GithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUserListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.UserItemView
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment.UserFragment
 
 class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
     MvpPresenter<UsersView>() {
@@ -29,6 +32,14 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
         super.onFirstViewAttach()
         viewState.init()
         loadData()
+
+        usersListPresenter.itemClickListener = { itemView ->
+            val users = mutableListOf<GithubUser>()
+            val bundle = Bundle()
+            bundle.putParcelable("login", users[itemView.pos])
+            UserFragment.getInstance(args = bundle)
+            router.navigateTo(Screen(UserFragment), true)
+        }
     }
 
     fun loadData() {
