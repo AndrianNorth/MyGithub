@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUserBinding
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.GithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UsersPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
@@ -14,7 +15,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackButtonListener
 class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonListener {
 
     companion object {
-        fun getInstance(args: Bundle?): UserFragment{
+        fun getInstance(user: GithubUser): UserFragment{
             val userFragment = UserFragment()
             userFragment.arguments
             return userFragment
@@ -22,6 +23,7 @@ class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonLis
     }
 
     private var vb: FragmentUserBinding? = null
+    val arg = this.arguments.toString()
     val presenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router) }
 
     override fun onCreateView(
@@ -30,7 +32,7 @@ class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonLis
         savedInstanceState: Bundle?
     ) = FragmentUserBinding.inflate(inflater, container, false).also {
         vb = it
-        vb?.tvUser?.text = arguments.toString()
+        vb?.tvUser?.text = arg
     }.root
 
     override fun onDestroyView() {

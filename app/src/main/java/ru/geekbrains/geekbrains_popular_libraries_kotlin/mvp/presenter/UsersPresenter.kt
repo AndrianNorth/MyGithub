@@ -2,10 +2,10 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 
 import android.os.Bundle
 import com.github.terrakok.cicerone.Router
-import com.github.terrakok.cicerone.Screen
 import moxy.MvpPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.GithubUsersRepo
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUserListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.UserItemView
@@ -13,6 +13,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment.UserFragmen
 
 class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
     MvpPresenter<UsersView>() {
+
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -22,11 +23,12 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
             val user = users[view.pos]
             view.setLogin(user.login)
         }
-
         override fun getCount() = users.size
+
     }
 
     val usersListPresenter = UsersListPresenter()
+    lateinit var screens: IScreens
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -35,10 +37,9 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
 
         usersListPresenter.itemClickListener = { itemView ->
             val users = mutableListOf<GithubUser>()
-            val bundle = Bundle()
-            bundle.putParcelable("login", users[itemView.pos])
-            UserFragment.getInstance(args = bundle)
-            router.navigateTo(Screen(UserFragment), true)
+            val userPosition = users[itemView.pos]
+            UserFragment.getInstance(user = userPosition)
+            router.navigateTo(screens.singleUser(userPosition))
         }
     }
 
@@ -54,3 +55,4 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
         return true
     }
 }
+
