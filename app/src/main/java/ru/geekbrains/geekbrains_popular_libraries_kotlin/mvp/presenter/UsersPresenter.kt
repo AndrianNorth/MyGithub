@@ -1,6 +1,5 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 
-import android.os.Bundle
 import com.github.terrakok.cicerone.Router
 import moxy.MvpPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
@@ -9,11 +8,9 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUserListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.UserItemView
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment.UserFragment
 
-class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
+class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router, val screens: IScreens) :
     MvpPresenter<UsersView>() {
-
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -28,7 +25,6 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
     }
 
     val usersListPresenter = UsersListPresenter()
-    lateinit var screens: IScreens
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -36,10 +32,8 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
         loadData()
 
         usersListPresenter.itemClickListener = { itemView ->
-            val users = mutableListOf<GithubUser>()
-            val userPosition = users[itemView.pos]
-            UserFragment.getInstance(user = userPosition)
-            router.navigateTo(screens.singleUser(userPosition))
+            val userLogin = usersListPresenter.users[itemView.pos]
+            router.navigateTo(screens.singleUser(userLogin))
         }
     }
 

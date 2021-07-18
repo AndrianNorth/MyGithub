@@ -7,24 +7,26 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUserBinding
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.GithubUsersRepo
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UsersPresenter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UserPresenter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackButtonListener
 
-class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonListener {
+class UserFragment private constructor() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     companion object {
-        fun getInstance(user: GithubUser): UserFragment{
-            val userFragment = UserFragment()
-            userFragment.arguments
-            return userFragment
+        private const val USER_ARG = "login"
+        fun getInstance(user: GithubUser) = UserFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(USER_ARG, user)
+            }
         }
     }
 
     private var vb: FragmentUserBinding? = null
-    val arg = this.arguments.toString()
-    val presenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router) }
+    val presenter: UserPresenter by moxyPresenter {
+        val userLogin = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
+        UserPresenter(App.instance.router, userLogin) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +34,6 @@ class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonLis
         savedInstanceState: Bundle?
     ) = FragmentUserBinding.inflate(inflater, container, false).also {
         vb = it
-        vb?.tvUser?.text = arg
     }.root
 
     override fun onDestroyView() {
@@ -40,6 +41,11 @@ class UserFragment private constructor() : MvpAppCompatFragment(), BackButtonLis
         vb = null
     }
 
+    override fun init(text: String) {
+        vb?.tvUser?.text = text
+    }
+
     override fun backPressed() = presenter.backClick()
+
 
 }
