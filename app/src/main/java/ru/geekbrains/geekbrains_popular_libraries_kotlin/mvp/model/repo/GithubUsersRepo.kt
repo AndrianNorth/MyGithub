@@ -1,5 +1,6 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo
 
+import io.reactivex.rxjava3.core.Observable
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 
 class GithubUsersRepo {
@@ -13,10 +14,11 @@ class GithubUsersRepo {
         GithubUser("login7"),
     )
 
-    fun getUsers(): List<GithubUser> {
-        return users
-    }
+        fun userObserver(): Observable<List<GithubUser>> = Observable.fromCallable{
+            users
+        }
+
+}
 
     // Разница между switchmap и flatmap в том, что последний подписан на все observable и выводит все результаты,
     // а первый при появлении нового observable отписывается от предыдущего и начинает выводить текущий.
-}
