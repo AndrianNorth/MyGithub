@@ -16,4 +16,7 @@ class GithubUsersRepo {
     fun getUsers(): List<GithubUser> {
         return users
     }
+
+    // Разница между switchmap и flatmap в том, что последний подписан на все observable и выводит все результаты,
+    // а первый при появлении нового observable отписывается от предыдущего и начинает выводить текущий.
 }
