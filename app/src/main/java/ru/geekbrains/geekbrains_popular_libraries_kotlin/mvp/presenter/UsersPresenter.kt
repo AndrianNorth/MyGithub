@@ -9,7 +9,11 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUse
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.UserItemView
 
-class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router, val screens: IScreens) :
+class UsersPresenter(
+    val usersRepo: GithubUsersRepo,
+    val router: Router,
+    val screens: IScreens
+) :
     MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
@@ -20,6 +24,7 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router, val scr
             val user = users[view.pos]
             view.setLogin(user.login)
         }
+
         override fun getCount() = users.size
 
     }
@@ -34,12 +39,12 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router, val scr
         usersListPresenter.itemClickListener = { itemView ->
             val userLogin = usersListPresenter.users[itemView.pos]
             router.navigateTo(screens.singleUser(userLogin))
+            println(userLogin)
         }
     }
 
     fun loadData() {
         val users = usersRepo.getUsers()
-        usersListPresenter.users.clear()
         usersListPresenter.users.addAll(users)
         viewState.updateList()
     }

@@ -47,5 +47,4 @@ class UserFragment private constructor() : MvpAppCompatFragment(), UserView, Bac
 
     override fun backPressed() = presenter.backClick()
 
-
 }
