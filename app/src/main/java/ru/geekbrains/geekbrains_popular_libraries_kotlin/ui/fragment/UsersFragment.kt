@@ -15,6 +15,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackButtonListener
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UsersRVAdapter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.navigation.AndroidScreens
 
 class UsersFragment private constructor() : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
@@ -22,9 +23,8 @@ class UsersFragment private constructor() : MvpAppCompatFragment(), UsersView, B
         fun getInstance() = UsersFragment()
     }
 
-    lateinit var screen: IScreens
     private var vb: FragmentUsersBinding? = null
-    val presenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router, screen) }
+    val presenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidScreens()) }
     var adapter: UsersRVAdapter? = null
 
 
