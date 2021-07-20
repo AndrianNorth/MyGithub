@@ -7,6 +7,6 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment.UserFragmen
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment.UsersFragment
 
 class AndroidScreens : IScreens {
-    override fun users() = FragmentScreen { UsersFragment.getInstance() }
-    override fun singleUser(githubUser: GithubUser) = FragmentScreen { UserFragment.getInstance(githubUser) }
+    override fun users() = FragmentScreen { UsersFragment.newInstance() }
+    override fun user(githubUser: GithubUser) = FragmentScreen { UserFragment.newInstance(githubUser) }
 }

@@ -18,7 +18,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.navigation.AndroidSc
 class UsersFragment private constructor() : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     companion object {
-        fun getInstance() = UsersFragment()
+        fun newInstance() = UsersFragment()
     }
 
     private var vb: FragmentUsersBinding? = null
@@ -40,7 +40,7 @@ class UsersFragment private constructor() : MvpAppCompatFragment(), UsersView, B
     }
 
     override fun init() {
-        vb?.rvUsers?.layoutManager = LinearLayoutManager(requireActivity())
+        vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
         adapter = UsersRVAdapter(presenter.usersListPresenter)
         vb?.rvUsers?.adapter = adapter
     }
@@ -49,6 +49,6 @@ class UsersFragment private constructor() : MvpAppCompatFragment(), UsersView, B
         adapter?.notifyDataSetChanged()
     }
 
-    override fun backPressed() = presenter.backClick()
+    override fun backPressed() = presenter.backPressed()
 
 }

@@ -20,12 +20,12 @@ class UsersPresenter(
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((UserItemView) -> Unit)? = null
 
+        override fun getCount() = users.size
+
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
             view.setLogin(user.login)
         }
-
-        override fun getCount() = users.size
 
     }
 
@@ -37,9 +37,8 @@ class UsersPresenter(
         loadData()
 
         usersListPresenter.itemClickListener = { itemView ->
-            val userLogin = usersListPresenter.users[itemView.pos]
-            router.navigateTo(screens.singleUser(userLogin))
-            println(userLogin)
+            val user = usersListPresenter.users[itemView.pos]
+            router.navigateTo(screens.user(user))
         }
     }
 
@@ -49,7 +48,7 @@ class UsersPresenter(
         viewState.updateList()
     }
 
-    fun backClick(): Boolean {
+    fun backPressed(): Boolean {
         router.exit()
         return true
     }

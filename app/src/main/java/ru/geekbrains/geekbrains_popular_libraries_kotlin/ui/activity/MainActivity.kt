@@ -45,7 +45,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 return
             }
         }
-        presenter.backClick()
+        presenter.backClicked()
     }
 
 

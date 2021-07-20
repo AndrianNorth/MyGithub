@@ -12,11 +12,11 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackButtonListener
 
-class UserFragment private constructor() : MvpAppCompatFragment(), UserView, BackButtonListener {
+class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     companion object {
         private const val USER_ARG = "login"
-        fun getInstance(user: GithubUser) = UserFragment().apply {
+        fun newInstance(user: GithubUser) = UserFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(USER_ARG, user)
             }
@@ -25,8 +25,8 @@ class UserFragment private constructor() : MvpAppCompatFragment(), UserView, Bac
 
     private var vb: FragmentUserBinding? = null
     val presenter: UserPresenter by moxyPresenter {
-        val userLogin = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
-        UserPresenter(App.instance.router, userLogin) }
+        val user = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
+        UserPresenter(App.instance.router, user) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +41,10 @@ class UserFragment private constructor() : MvpAppCompatFragment(), UserView, Bac
         vb = null
     }
 
-    override fun init(text: String) {
+    override fun setLogin(text: String) {
         vb?.tvUser?.text = text
     }
 
-    override fun backPressed() = presenter.backClick()
+    override fun backPressed() = presenter.backPressed()
 
 }

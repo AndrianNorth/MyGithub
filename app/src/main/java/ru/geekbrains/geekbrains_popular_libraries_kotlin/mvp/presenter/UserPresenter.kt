@@ -10,10 +10,10 @@ class UserPresenter(val router: Router, val user: GithubUser) :
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.init(user.login)
+        viewState.setLogin(user.login)
     }
 
-    fun backClick(): Boolean {
+    fun backPressed(): Boolean {
         router.exit()
         return true
     }
