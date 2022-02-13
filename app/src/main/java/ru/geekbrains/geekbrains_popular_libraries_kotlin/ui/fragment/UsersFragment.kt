@@ -22,14 +22,8 @@ import javax.inject.Inject
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
-    @Inject
-    lateinit var database: Database
-
-
     companion object {
-        fun newInstance() = UsersFragment().apply {
-            App.instance.appComponent.inject(this)
-        }
+        fun newInstance() = UsersFragment()
     }
 
     val presenter: UsersPresenter by moxyPresenter {
@@ -57,13 +51,9 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(
-            presenter.usersListPresenter,
-            GlideImageLoader(
-                RoomImageCache(database, App.instance.cacheDir),
-                AndroidNetworkStatus(requireContext())
-            )
-        )
+        adapter = UsersRVAdapter(presenter.usersListPresenter).apply {
+            App.instance.appComponent.inject(this)
+        }
         vb?.rvUsers?.adapter = adapter
     }
 
